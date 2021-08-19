@@ -6,7 +6,7 @@ const tempMin = -20;
 const tempMax = 40;
 const heartMin = 80;
 const heartMax = 180;
-const stepsMin = 0;
+const stepsMin = 1;
 const stepsMax = 50000;
 class App extends React.Component {
   constructor(value) {
@@ -18,7 +18,9 @@ class App extends React.Component {
       waterValue: 1.5,
     };
   }
-
+  componentDidMount = () => {
+    this.calculateWater();
+  };
   onHeartChange = (event) => {
     this.setState({ heartValue: event.target.value });
   };
@@ -40,8 +42,7 @@ class App extends React.Component {
       calculatedWater =
         calculatedWater + (this.state.stepsValue - 10000) * 0.00002;
     }
-    this.setState({ waterValue: calculatedWater });
-    return this.state.waterValue;
+    this.setState({ waterValue: calculatedWater.toFixed(4) });
   };
   render() {
     return (
@@ -49,22 +50,25 @@ class App extends React.Component {
         <div className="row">
           {/* Water */}
           <Box
+            initialState={this.initialState}
             icon="local_drink"
             color="#3A85FF"
             value={this.state.waterValue}
             unit="L"
+            backgroundHandler={this.backgroundHandler}
           />
 
           {/* Steps */}
           <Box
             icon="directions_walk"
-            color="black"
+            color="white"
             value={this.state.stepsValue}
             unit="steps"
             min={stepsMin}
             max={stepsMax}
             onInput={this.onStepsChange}
             onChange={this.calculateWater}
+            backgroundHandler={this.backgroundHandler}
           />
 
           {/* Heart */}
@@ -77,6 +81,7 @@ class App extends React.Component {
             max={heartMax}
             onInput={this.onHeartChange}
             onChange={this.calculateWater}
+            backgroundHandler={this.backgroundHandler}
           />
 
           {/* Temperature */}
@@ -89,6 +94,7 @@ class App extends React.Component {
             max={tempMax}
             onInput={this.onTempChange}
             onChange={this.calculateWater}
+            backgroundHandler={this.backgroundHandler}
           />
         </div>
       </div>
